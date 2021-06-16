@@ -132,13 +132,19 @@ $showIcon = tpl_getConf('showIcon');
 					<!-- left sidebar -->
 					<div class="col-12 col-md-3 col-xl-2 ct-sidebar">
 						<nav class="collapse ct-links" id="ct-docs-nav">
-							<?php
-							if (!empty($_SERVER['REMOTE_USER'])) {
-								echo '<li class="nav-item nav-link"> ';
-								tpl_userinfo();
-								echo '</li>';
-							}
-							?>
+							<?php if (!empty($_SERVER['REMOTE_USER'])): ?>
+							<?php if ($showSidebar): ?>
+							<div id="dokuwiki__aside" class="ct-toc-item active">
+								<!-- <a class="ct-toc-link">
+									<?php //echo "Sidebar" ?>
+								</a> -->
+								<div class="leftsidebar">
+									<?php tpl_includeFile('sidebarheader.html')?>
+									<?php tpl_include_page($conf['sidebar'], 1, 1)?>
+									<?php tpl_includeFile('sidebarfooter.html')?>
+								</div>
+							</div>
+							<?php endif;?>
 							<?php if ($showTools && !tpl_getConf('movePageTools')): ?>
 							<div id="dokuwiki__pagetools" class="ct-toc-item active">
 								<a class="ct-toc-link">
@@ -157,7 +163,7 @@ $showIcon = tpl_getConf('showIcon');
 								</ul>
 							</div>
 							<?php endif;?>
-
+							
 							<div class="ct-toc-item active">
 
 								<a class="ct-toc-link">
@@ -176,21 +182,8 @@ $showIcon = tpl_getConf('showIcon');
 									?>
 								</ul>
 							</div>
-
-
-
-							<?php if ($showSidebar): ?>
-							<div id="dokuwiki__aside" class="ct-toc-item active">
-								<a class="ct-toc-link">
-									<?php echo "Sidebar" ?>
-								</a>
-								<div class="leftsidebar">
-									<?php tpl_includeFile('sidebarheader.html')?>
-									<?php tpl_include_page($conf['sidebar'], 1, 1)?>
-									<?php tpl_includeFile('sidebarfooter.html')?>
-								</div>
-							</div>
 							<?php endif;?>
+							
 						</nav>
 					</div>
 
@@ -221,6 +214,7 @@ $showIcon = tpl_getConf('showIcon');
 						</nav>
 
 						<?php if ($showTools && tpl_getConf('movePageTools')): ?>
+						<?php if (!empty($_SERVER['REMOTE_USER'])): ?>
 						<!-- Page Menu -->
                         <div class="argon-doku-page-menu">
                             <?php
@@ -232,8 +226,13 @@ $showIcon = tpl_getConf('showIcon');
                                     . '<span class="a11y">'.$item->getLabel().'</span>'
                                     . '</a></li>';
                             }
+							echo '<li><a class="page-menu__link" href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&purge=true" >'
+								.'<i class=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><g "><path transform="scale(0.8), translate(0 50)" d="M304,320a16,16,0,1,0,16,16A16,16,0,0,0,304,320Zm32-96a16,16,0,1,0,16,16A16,16,0,0,0,336,224Zm32,64a16,16,0,1,0-16-16A16,16,0,0,0,368,288Zm-32,32a16,16,0,1,0-16-16A16,16,0,0,0,336,320Zm-32-64a16,16,0,1,0,16,16A16,16,0,0,0,304,256Zm128-32a16,16,0,1,0-16-16A16,16,0,0,0,432,224Zm-48,16a16,16,0,1,0,16-16A16,16,0,0,0,384,240Zm-16-48a16,16,0,1,0,16,16A16,16,0,0,0,368,192Zm96,32a16,16,0,1,0,16,16A16,16,0,0,0,464,224Zm32-32a16,16,0,1,0,16,16A16,16,0,0,0,496,192Zm-64,64a16,16,0,1,0,16,16A16,16,0,0,0,432,256Zm-32,32a16,16,0,1,0,16,16A16,16,0,0,0,400,288Zm-64,64a16,16,0,1,0,16,16A16,16,0,0,0,336,352Zm-32,32a16,16,0,1,0,16,16A16,16,0,0,0,304,384Zm64-64a16,16,0,1,0,16,16A16,16,0,0,0,368,320Zm21.65-218.35-11.3-11.31a16,16,0,0,0-22.63,0L350.05,96A111.19,111.19,0,0,0,272,64c-19.24,0-37.08,5.3-52.9,13.85l-10-10A121.72,121.72,0,0,0,123.44,32C55.49,31.5,0,92.91,0,160.85V464a16,16,0,0,0,16,16H48a16,16,0,0,0,16-16V158.4c0-30.15,21-58.2,51-61.93a58.38,58.38,0,0,1,48.93,16.67l10,10C165.3,138.92,160,156.76,160,176a111.23,111.23,0,0,0,32,78.05l-5.66,5.67a16,16,0,0,0,0,22.62l11.3,11.31a16,16,0,0,0,22.63,0L389.65,124.28A16,16,0,0,0,389.65,101.65Z"></path></g></svg></i>'
+								. '<span class="a11y">flush cache</span>'
+								.'</a></li>';
                             ?>
 						</div>
+						<?php endif;?>
 						<?php endif;?>
 
 						<!-- Wiki Contents -->
@@ -249,6 +248,7 @@ $showIcon = tpl_getConf('showIcon');
 
 						<hr />
 						<!-- Footer -->
+						<?php if (!empty($_SERVER['REMOTE_USER'])): ?>
 						<div class="card footer-card">
 							<div class="card-body">
 								<div class="container">
@@ -292,6 +292,7 @@ $showIcon = tpl_getConf('showIcon');
 
 							</div>
 						</div>
+						<?php endif; ?>
 						<?php tpl_indexerWebBug(); ?>
 					</main>
 
